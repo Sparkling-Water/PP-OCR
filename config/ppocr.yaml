@@ -1,0 +1,37 @@
+common:
+  use_gpu:              true            # 是否使用GPU
+  use_mkldnn:           true            # 是否使用mkldnn库
+  use_tensorrt:         false            # 是否使用tensorrt加速
+  gpu_id:               0               # GPU id
+  gpu_mem:              500             # GPU申请的内存
+  cpu_num_threads:      6               # CPU预测时的线程数，在机器核数充足的情况下，该值越大，预测速度越快
+  precision:            "fp32"          # 模型参数精度,fp32/fp16/int8
+
+forward:
+  use_det:              true            # 是否检测文字
+  use_rec:              true            # 是否识别文字
+  use_cls:              true            # 是否识别文字方向
+
+# 文字检测参数
+det:
+  det_model:            "../lib/det"          # 模型路径
+  max_side:             480                   # 输入图像长宽大于m_max_side时，等比例缩放图像，使得图像最长边为m_max_side
+  det_thresh:           0.3                   # 用于过滤DB预测的二值化图像，设置为0.-0.3对结果影响不明显
+  det_box_thresh:       0.5                   # DB后处理过滤box的阈值，如果检测存在漏框情况，可酌情减小
+  det_unclip_ratio:     1.5                   # 表示文本框的紧致程度，越小则文本框更靠近文本
+  det_score_mode:       "fast"                # slow:使用多边形框计算bbox score，fast:使用矩形框计算
+  use_dilation:         true                  # Whether use the dilation on output map
+
+# 文字方向分类参数
+cls:
+  cls_model:            "../lib/cls"          # 模型路径
+  cls_thresh:           0.9                   # 方向分类器的得分阈值
+  cls_batch_num:        6                     # 方向分类器batchsize
+
+# 文字识别参数
+rec:
+  rec_model:            "../lib/rec"                # 模型路径
+  char_dict_path:       "../lib/ppocr_keys_v1.txt"  # 字典文件路径
+  rec_batch_num:        6                           # 识别模型batchsize
+  rec_img_h:            48                          # 识别模型输入图像高度
+  rec_img_w:            240                         # 识别模型输入图像宽度
